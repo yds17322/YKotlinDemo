@@ -2,6 +2,7 @@ package com.yds.ykotlindemo.model
 
 import com.yds.ykitlindemo.http.API
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +21,9 @@ abstract class BaseHttpModel constructor() {
     }
 
     fun initHttp(host: String) {
-        val mOkHttp: OkHttpClient = OkHttpClient.Builder().build()
+        val mInterceptor = HttpLoggingInterceptor()
+        mInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val mOkHttp: OkHttpClient = OkHttpClient.Builder().addInterceptor(mInterceptor).build()
         val mRetrofit: Retrofit = Retrofit.Builder()
                 .baseUrl(host)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -32,7 +35,7 @@ abstract class BaseHttpModel constructor() {
 
     fun addSubscription(s: Subscription) {
         if (null == mCompositeSubscription) {
-            mCompositeSubscription = CompositeSubscription();
+            mCompositeSubscription = CompositeSubscription()
         }
         mCompositeSubscription!!.add(s)
     }

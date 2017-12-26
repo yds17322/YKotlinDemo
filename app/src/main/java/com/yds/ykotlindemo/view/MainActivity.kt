@@ -32,7 +32,9 @@ class MainActivity : BaseActivity<IMainInter, MainPresenter>(), IMainInter, Navi
 
         mNavigationView.setNavigationItemSelectedListener(this)
 
-        mBtn.setOnClickListener { mPresenter.getName() }
+        // init
+        mPresenter.initFragment()
+        mPresenter.changeFragment(this, R.id.mFrameLayout, MainPresenter.ONE_FRAGMENT)
     }
 
     override fun onBackPressed() {
@@ -43,17 +45,15 @@ class MainActivity : BaseActivity<IMainInter, MainPresenter>(), IMainInter, Navi
         }
     }
 
-    override fun getName(name: String) {
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_camera -> {
-                mPresenter.getName()
+            R.id.nav_one -> {
+
             }
             else -> {
                 Toast.makeText(this, item.title.toString(), Toast.LENGTH_SHORT).show()
+//                startActivity(Intent(this, TestActivity::class.java))
+//                finish()
             }
         }
         mDrawerLayout.closeDrawer(GravityCompat.START)
